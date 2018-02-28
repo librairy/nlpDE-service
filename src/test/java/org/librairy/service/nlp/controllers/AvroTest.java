@@ -8,6 +8,8 @@ import org.librairy.service.nlp.facade.AvroClient;
 import org.librairy.service.nlp.facade.model.Form;
 import org.librairy.service.nlp.facade.model.PoS;
 import org.librairy.service.nlp.service.IXAService;
+import org.librairy.service.nlp.service.NLPServiceImpl;
+import org.librairy.service.nlp.service.ServiceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {AvroController.class,IXAService.class})
+@SpringBootTest(classes = {AvroController.class,NLPServiceImpl.class, ServiceManager.class})
 @WebAppConfiguration
 public class AvroTest {
 
