@@ -90,7 +90,6 @@ public class IXAService implements org.librairy.service.nlp.facade.model.NlpServ
                 .map(term-> {
                     switch (form){
                         case LEMMA: return Strings.isNullOrEmpty(term.getLemma())? term.getStr() : term.getLemma().toLowerCase();
-                        case STEM:  return Strings.isNullOrEmpty(term.getStr())? term.getStr() : term.getStr();
                         default: return term.getStr().toLowerCase();
                     }
                 })
