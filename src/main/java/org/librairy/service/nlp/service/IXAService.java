@@ -1,5 +1,6 @@
 package org.librairy.service.nlp.service;
 
+import com.google.common.base.CharMatcher;
 import com.google.common.base.Strings;
 import com.google.common.io.Files;
 import eus.ixa.ixa.pipe.pos.Annotate;
@@ -10,6 +11,7 @@ import org.apache.avro.AvroRemoteException;
 import org.librairy.service.nlp.facade.model.Annotation;
 import org.librairy.service.nlp.facade.model.Form;
 import org.librairy.service.nlp.facade.model.PoS;
+import org.librairy.service.nlp.facade.model.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -89,12 +91,32 @@ public class IXAService implements org.librairy.service.nlp.facade.model.NlpServ
         return analyze(text,filter).stream()
                 .map(term-> {
                     switch (form){
-                        case LEMMA: return Strings.isNullOrEmpty(term.getLemma())? term.getStr() : term.getLemma().toLowerCase();
+                        case LEMMA: return normalize(term);
                         default: return term.getStr().toLowerCase();
                     }
                 })
                 .collect(Collectors.joining(" "));
     }
+
+    private String normalize(Term term){
+        return Strings.isNullOrEmpty(term.getLemma()) || CharMatcher.DIGIT.matchesAllOf(term.getLemma())? term.getStr() : term.getLemma().toLowerCase();
+    }
+
+
+    @Override
+    public List<Token> group(String text, List<PoS> filter) throws AvroRemoteException {
+
+        Map<Token, Long> groups = analyze(text, filter).stream()
+                .map(term -> new Token(term.getStr(), normalize(term), PoSTranslator.toPoSTag(term.getPos()), 0l))
+                .collect(Collectors.groupingBy(token -> token, Collectors.counting()));
+
+        return groups.entrySet().stream().map( entry -> {
+            org.librairy.service.nlp.facade.model.Token token = entry.getKey();
+            token.setFreq(entry.getValue());
+            return token;
+        }).collect(Collectors.toList());
+    }
+
 
     @Override
     public List<Annotation> annotate(String text, List<PoS> filter) throws AvroRemoteException {
