@@ -7,7 +7,6 @@ import org.junit.runner.RunWith;
 import org.librairy.service.nlp.facade.AvroClient;
 import org.librairy.service.nlp.facade.model.Form;
 import org.librairy.service.nlp.facade.model.PoS;
-import org.librairy.service.nlp.service.IXAService;
 import org.librairy.service.nlp.service.NLPServiceImpl;
 import org.librairy.service.nlp.service.ServiceManager;
 import org.slf4j.Logger;
@@ -46,7 +45,7 @@ public class AvroTest {
 
         texts.forEach(text -> {
             try {
-                client.process(text, Arrays.asList(new PoS[]{PoS.NOUN, PoS.VERB, PoS.ADVERB, PoS.ADJECTIVE}), Form.RAW);
+                client.tokens(text, Arrays.asList(new PoS[]{PoS.NOUN, PoS.VERB, PoS.ADVERB, PoS.ADJECTIVE}), Form.RAW, false);
             } catch (AvroRemoteException e) {
                 e.printStackTrace();
             }
@@ -75,7 +74,7 @@ public class AvroTest {
 
         texts.forEach(text -> {
             try {
-                client.annotate(text, Arrays.asList(new PoS[]{PoS.NOUN, PoS.VERB, PoS.ADVERB, PoS.ADJECTIVE}));
+                client.annotations(text, Arrays.asList(new PoS[]{PoS.NOUN, PoS.VERB, PoS.ADVERB, PoS.ADJECTIVE}), false, false);
             } catch (AvroRemoteException e) {
                 e.printStackTrace();
             }
