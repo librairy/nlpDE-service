@@ -1,8 +1,8 @@
 version: '2'
 services:
   dbpedia-spotlight:
-      image: dbpedia/spotlight-german:latest
-      command: java -Dfile.encoding=UTF-8 -Xmx10G -Dthreads.max=15 -Dthreads.core=15 -jar /opt/spotlight/dbpedia-spotlight-nightly-build.jar /opt/spotlight/de  http://0.0.0.0:80/rest
+    image: dbpedia/spotlight-german:latest
+    command: java -Dfile.encoding=UTF-8 -Xmx10G -Dthreads.max=15 -Dthreads.core=15 -jar /opt/spotlight/dbpedia-spotlight-nightly-build.jar /opt/spotlight/de  http://0.0.0.0:80/rest
   nlp-en-service:
     image: librairy/nlp-de-service:latest
     restart: always
